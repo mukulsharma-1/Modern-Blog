@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+
+<main class="container mx-auto px-4 py-12">
+    <!-- Hero Section -->
+    <section class="glass rounded-lg p-12 mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            Welcome to Modern Blog
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+            Discover the latest insights about technology, development, and innovation. Stay updated with our expert articles and tutorials.
+        </p>
+        <div class="flex justify-center space-x-4">
+            <a href="#posts" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors">
+                Read Posts
+            </a>
+            <a href="/about" class="px-6 py-3 border border-primary text-primary dark:text-white rounded-lg hover:bg-primary hover:text-white transition-colors">
+                Learn More
+            </a>
+        </div>
+    </section>
+
+    <!-- Featured Posts -->
+    <section id="posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <% posts.forEach((post, index) => { %>
+            <article class="glass rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+                        <%= post.title %>
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">
+                        <%= post.excerpt %>
+                    </p>
+                    <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                        <span><%= post.date %></span>
+                        <span>By <%= post.author %></span>
+                    </div>
+                </div>
+            </article>
+        <% }); %>
+    </section>
+
+    <!-- Additional Content -->
+    <section class="glass rounded-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Why Choose Us?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <svg class="w-12 h-12 text-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Expert Insights</h3>
+                <p class="text-gray-600 dark:text-gray-300">Get valuable insights from industry experts and experienced developers.</p>
+            </div>
+            <div class="text-center">
+                <svg class="w-12 h-12 text-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Latest Updates</h3>
+                <p class="text-gray-600 dark:text-gray-300">Stay informed with the latest trends and updates in technology.</p>
+            </div>
+            <div class="text-center">
+                <svg class="w-12 h-12 text-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Community</h3>
+                <p class="text-gray-600 dark:text-gray-300">Join our growing community of developers and tech enthusiasts.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="javascripts/script.js"></script> 

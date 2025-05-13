@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<main class="container mx-auto px-4 py-6">
+    <div class="max-w-2xl mx-auto">
+        <section class="glass rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white"><%= blog.title %></h1>
+            <p class="text-gray-600 dark:text-gray-300 mt-4"><%= blog.content %></p>
+            <p class="text-sm text-gray-500 mt-2">Published on: <%= blog.createdAt.toDateString() %></p>
+
+            <!-- Likes & Views -->
+            <div class="mt-4 flex items-center space-x-4">
+                <p class="text-gray-700 dark:text-gray-300">Views: <%= blog.views %></p>
+                <p class="text-gray-700 dark:text-gray-300">Likes: <%= blog.likes %></p>
+                <% if (user) { %>
+                    <form method="POST" action="/blogs/<%= blog._id %>/like">
+                        <button type="submit" class="bg-green-500 text-white px-3 py-2 rounded-lg">Like</button>
+                    </form>
+                <% } %>
+            </div>
+        </section>
+
+        <!-- Comments -->
+        <section class="glass rounded-lg p-6 mt-6">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Comments</h2>
+            <% blog.comments.forEach(comment => { %>
+                <div class="border-b py-4">
+                    <p class="text-gray-700 dark:text-gray-300"><%= comment.content %></p>
+                </div>
+            <% }) %>
+
+            <% if (user) { %>
+                <form method="POST" action="/blogs/<%= blog._id %>/comments" class="mt-4">
+                    <textarea name="content" required class="w-full px-4 py-2 rounded-lg border"></textarea>
+                    <button type="submit" class="bg-primary text-white px-3 py-2 rounded-lg">Add Comment</button>
+                </form>
+            <% } %>
+        </section>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

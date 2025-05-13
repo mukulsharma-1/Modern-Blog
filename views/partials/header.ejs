@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %> | Modern Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3B82F6",
+              secondary: "#10B981",
+            },
+            backgroundImage: {
+              "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .dark .glass {
+        background: rgba(17, 24, 39, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: white;
+        min-width: 200px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        border-radius: 0.5rem;
+      }
+      .dark .dropdown-content {
+        background-color: #1f2937;
+      }
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300"
+  >
+    <header class="glass sticky top-0 z-50">
+      <nav class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <!-- Logo -->
+          <a href="/" class="text-2xl font-bold text-primary dark:text-white"
+            >Modern Blog</a
+          >
+
+          <!-- Navigation Links - Centered -->
+          <div class="hidden md:flex items-center justify-center flex-1">
+            <div class="flex space-x-8">
+              <a
+                href="/"
+                class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+                >Home</a
+              >
+              <a
+                href="/about"
+                class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+                >About</a
+              >
+              <a
+                href="/contact"
+                class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+                >Contact</a
+              >
+              <% if (user) { %>
+              <a
+                href="/users/blogs/create"
+                class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+                >Write Blog</a
+              >
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Right Side - Login/Register or Account Menu -->
+          <div class="flex items-center space-x-4">
+            <% if (user) { %>
+            <div class="dropdown">
+              <button
+                class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >
+                <span><%= user.username %></span>
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <div class="dropdown-content p-2">
+                <a
+                  href="/users/dashboard"
+                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  >My Account</a
+                >
+                <a
+                  href="/users/blogs"
+                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  >My Blogs</a
+                >
+                <a
+                  href="/users/settings"
+                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  >Settings</a
+                >
+                <a
+                  href="/users/change-password"
+                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  >Change Password</a
+                >
+                <hr class="my-2 border-gray-200 dark:border-gray-700" />
+                <a
+                  href="/users/logout"
+                  class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  >Logout</a
+                >
+              </div>
+            </div>
+            <% } else { %>
+            <a
+              href="/login"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Login</a
+            >
+            <a
+              href="/register"
+              class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
+              >Register</a
+            >
+            <% } %>
+
+            <!-- Dark mode toggle -->
+            <button
+              id="darkModeToggle"
+              class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              <!-- Sun Icon (for Light Mode) -->
+              <svg
+                class="w-6 h-6 dark:hidden"
+                fill="none"
+                stroke="#FDB813"
+                viewBox="0 0 24 24"
+              >
+                <!-- Sun color: #FDB813 (Bright Yellow) -->
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+
+              <!-- Moon Icon (for Dark Mode) -->
+              <svg
+                class="w-6 h-6 hidden dark:block"
+                fill="none"
+                stroke="#A0AEC0"
+                viewBox="0 0 24 24"
+              >
+                <!-- Moon color: #A0AEC0 (Silvery Gray) -->
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="md:hidden mt-4">
+          <div class="flex flex-col space-y-2">
+            <a
+              href="/"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Home</a
+            >
+            <a
+              href="/about"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >About</a
+            >
+            <a
+              href="/contact"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Contact</a
+            >
+            <% if (user) { %>
+            <a
+              href="/users/blogs/create"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Write Blog</a
+            >
+            <a
+              href="/users/dashboard"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >My Account</a
+            >
+            <a
+              href="/users/blogs"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >My Blogs</a
+            >
+            <a
+              href="/users/settings"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Settings</a
+            >
+            <a
+              href="/users/change-password"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Change Password</a
+            >
+            <a
+              href="/users/logout"
+              class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
+              >Logout</a
+            >
+            <% } else { %>
+            <a
+              href="/login"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Login</a
+            >
+            <a
+              href="/register"
+              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >Register</a
+            >
+            <% } %>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <script src="/javascripts/script.js"></script>
+  </body>
+</html>
