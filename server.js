@@ -33,14 +33,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     secret: process.env.SECRET_KEY,
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: process.env.DATABASE_URI,
       collectionName: "sessions",
     }),
     cookie: {
-      secure: process.env.COOKIE_SEC,
+      secure: process.env.COOKIE_SEC?.toLocaleLowerCase() === "true",
       maxAge: 1000 * 60 * 60 * 24,
     },
   })
@@ -66,7 +66,7 @@ app.use((err, req, res, next) => {
   console.error("Server Error:", err);
   res
     .status(500)
-    .render("500", {
+    .render("errors/500", {
       title: "Server Error",
       errorMessage: err.message || "Unknown error",
     });

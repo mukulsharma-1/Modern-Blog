@@ -64,22 +64,42 @@ router.get("/contact", async (req, res, next) => {
 // **Login (GET)**
 router.get("/login", redirectIfAuthenticated, async (req, res, next) => {
   try {
-    res.render("login", { title: "Login" });
+    res.render("login", { title: "Login", emailError: "", passwordError: "" });
   } catch (error) {
     next(error);
   }
 });
 
+
+
 // **Login (POST)**
 router.post("/login", redirectIfAuthenticated, async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    console.log("Login Route Hit");
+
+    // Destructure email, password, and remember (checkbox value) from req.body
+    const { email, password, remember } = req.body;
     const userData = await User.findOne({ email });
 
-    if (!userData || !(await userData.verifyPassword(password))) {
+    console.log("User Data Found:", userData);
+
+    // If user is not found, show email error
+    if (!userData) {
+      console.log("Email is wrong");
       return res.render("login", {
         title: "Login",
-        error: "Invalid email or password",
+        emailError: "Email is wrong",
+        passwordError: "",
+      });
+    }
+
+    // If email exists but password is incorrect, show password error
+    if (!(await userData.verifyPassword(password))) {
+      console.log("Password is wrong");
+      return res.render("login", {
+        title: "Login",
+        emailError: "",
+        passwordError: "Password is wrong",
       });
     }
 
@@ -90,10 +110,20 @@ router.post("/login", redirectIfAuthenticated, async (req, res, next) => {
       username: userData.username,
     };
 
-    req.session.save((err) => {
-      if (err) console.error("Session Save Error:", err);
-      res.redirect("/users/dashboard");
-    });
+    // Adjust session duration based on "Remember me": 7 days if checked, else 1 day.
+    if (remember) {
+      req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
+    } else {
+      req.session.cookie.maxAge = 1000 * 60 * 60 * 24;
+    }
+
+    console.log("Session Before Save:", req.session);
+
+    // Ensure session persistence before redirecting
+    await new Promise((resolve) => req.session.save(resolve));
+
+    console.log("Session Successfully Created:", req.session);
+    res.redirect("/users/dashboard");
   } catch (error) {
     next(error);
   }
@@ -143,5 +173,11 @@ router.post("/newsletter", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get("/test-session", (req, res) => {
+  console.log("Testing session persistence...");
+  res.json({ sessionData: req.session });
+});
+
 
 export default router;

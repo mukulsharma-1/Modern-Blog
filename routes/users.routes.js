@@ -8,15 +8,20 @@ const router = express.Router();
 
 // Middleware: Require authentication before actions
 const isAuthenticated = (req, res, next) => {
+  console.log("Session Check in Middleware:", req.session); // Debugging step
+
   if (!req.session || !req.session.userid) {
+    console.log("Session Missing - Redirecting to /login");
     return res.redirect("/login");
   }
   next();
 };
 
+
 // **Dashboard Route Fix**
 router.get("/dashboard", isAuthenticated, async (req, res, next) => {
   try {
+    console.log(req.session.userid, "dashboard")
     const user = await User.findById(req.session.userid).populate("blogs");
 
     if (!user) {
