@@ -17,10 +17,9 @@
             backgroundImage: {
               "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
             },
-             // Ensure max-h-screen is defined if not default, though we'll use height for transition
-            maxHeight: {
-                'screen': '100vh',
-            }
+             maxHeight: {
+                 'screen': '100vh',
+             }
           },
         },
       };
@@ -73,30 +72,25 @@
         width: 100%;
         z-index: 40; /* Ensure it's above page content */
         background-color: white; /* Default background */
+        visibility: hidden; /* Initially hidden */
       }
 
       .dark #mobileMenu {
-           background-color: #1f2937; /* Dark mode background */
+            background-color: #1f2937; /* Dark mode background */
       }
 
-      #mobileMenu.opacity-100 {
-         /* When open, set height to auto to allow content to dictate height */
-         /* Note: Transitioning from 0 to auto doesn't animate smoothly.
-            A common technique is to set a large max-height or calculate height with JS.
-            However, for simplicity and often sufficient results, we'll rely on opacity
-            and ensuring overflow is hidden when collapsed. If height transition is critical,
-            JavaScript calculation would be needed. Let's primarily rely on opacity and display. */
-         height: auto; /* Allow content to define height */
-         opacity: 1; /* Make it fully visible */
-         display: block; /* Ensure it's displayed */
-         visibility: visible; /* Ensure it's visible */
+      /* Class added by JS when menu is open */
+      #mobileMenu.is-open {
+          height: auto; /* Allow content to define height */
+          opacity: 1; /* Make it fully visible */
+          visibility: visible; /* Make it visible */
       }
 
-      /* Ensure the inner content div doesn't have conflicting styles */
-      #mobileMenu > div {
-          padding-top: 0.5rem; /* Add back padding removed from transition property */
-          padding-bottom: 0.75rem; /* Add back padding removed from transition property */
-      }
+       /* Ensure the inner content div doesn't have conflicting styles */
+       #mobileMenu > div {
+           padding-top: 0.5rem; /* Add back padding */
+           padding-bottom: 0.75rem; /* Add back padding */
+       }
       /* --- End Improved Mobile Menu Animation CSS --- */
 
     </style>
@@ -284,27 +278,34 @@
         <div
           id="mobileMenu"
           class="md:hidden mobile-menu-transition"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="hamburgerButton"
         >
           <div class="px-2 space-y-1 sm:px-3">
             <a
               href="/"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Home</a
             >
             <a
               href="/about"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >About</a
             >
             <a
               href="/contact"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Contact</a
             >
             <% if (user) { %>
             <a
               href="/users/blogs/create"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Write Blog</a
             >
             <hr class="my-2 border-gray-200 dark:border-gray-600" />
@@ -316,27 +317,32 @@
             <a
               href="/users/dashboard"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >My Account</a
             >
             <a
               href="/users/blogs"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >My Blogs</a
             >
             <a
               href="/users/settings"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Settings</a
             >
             <a
               href="/users/change-password"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Change Password</a
             >
             <hr class="my-2 border-gray-200 dark:border-gray-600" />
             <a
               href="/users/logout"
               class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Logout</a
             >
             <% } else { %>
@@ -344,11 +350,13 @@
             <a
               href="/login"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Login</a
             >
             <a
               href="/register"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+              role="menuitem"
               >Register</a
             >
             <% } %>
@@ -356,7 +364,4 @@
         </div>
       </nav>
     </header>
-
-    <script src="/javascripts/script.js"></script>
-  </body>
-</html>
+    
