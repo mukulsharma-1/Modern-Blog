@@ -11,28 +11,28 @@
         <div>
           <label for="email" class="block text-gray-700 dark:text-gray-300 mb-2">Email</label>
           <% if (emailError) { %>
-            <span class="text-red-600 text-sm"><%= emailError %></span>
+            <span id="emailError" class="text-red-600 text-sm"><%= emailError %></span>
           <% } %>
           <input
             type="email"
             id="email"
             name="email"
             required
-            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none <%= emailError ? 'border-red-500 ring-red-500 ring-2' : 'border-gray-300 focus:ring-primary' %>">
+            class="w-full px-4 py-2 rounded-lg border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none <%= emailError ? 'border-red-500 ring-red-500 ring-2' : 'border-gray-300 focus:ring-primary' %>">
         </div>
         
         <!-- Password Field -->
         <div>
           <label for="password" class="block text-gray-700 dark:text-gray-300 mb-2">Password</label>
           <% if (passwordError) { %>
-            <span class="text-red-600 text-sm"><%= passwordError %></span>
+            <span id="passwordError" class="text-red-600 text-sm"><%= passwordError %></span>
           <% } %>
           <input
             type="password"
             id="password"
             name="password"
             required
-            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none <%= passwordError ? 'border-red-500 ring-red-500 ring-2' : 'border-gray-300 focus:ring-primary' %>">
+            class="w-full px-4 py-2 rounded-lg border dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none <%= passwordError ? 'border-red-500 ring-red-500 ring-2' : 'border-gray-300 focus:ring-primary' %>">
         </div>
         
         <div class="flex items-center justify-between">

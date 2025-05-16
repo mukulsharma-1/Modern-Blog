@@ -17,6 +17,10 @@
             backgroundImage: {
               "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
             },
+             // Ensure max-h-screen is defined if not default, though we'll use height for transition
+            maxHeight: {
+                'screen': '100vh',
+            }
           },
         },
       };
@@ -53,9 +57,48 @@
       }
       html,
       body {
-        background-color: #1f2937; /* Replace with your actual page color */
+        background-color: #1f2937; /* Fallback page color */
         overscroll-behavior: contain; /* Prevent white flash during scroll */
       }
+
+      /* --- Improved Mobile Menu Animation CSS --- */
+      #mobileMenu {
+        transition: height 300ms ease-in-out, opacity 300ms ease-in-out;
+        overflow: hidden; /* Hide content when collapsed */
+        height: 0; /* Start with height 0 when closed */
+        opacity: 0; /* Start with opacity 0 when closed */
+        position: absolute; /* Position absolutely below the header */
+        top: 64px; /* Adjust based on your header's actual height */
+        left: 0;
+        width: 100%;
+        z-index: 40; /* Ensure it's above page content */
+        background-color: white; /* Default background */
+      }
+
+      .dark #mobileMenu {
+           background-color: #1f2937; /* Dark mode background */
+      }
+
+      #mobileMenu.opacity-100 {
+         /* When open, set height to auto to allow content to dictate height */
+         /* Note: Transitioning from 0 to auto doesn't animate smoothly.
+            A common technique is to set a large max-height or calculate height with JS.
+            However, for simplicity and often sufficient results, we'll rely on opacity
+            and ensuring overflow is hidden when collapsed. If height transition is critical,
+            JavaScript calculation would be needed. Let's primarily rely on opacity and display. */
+         height: auto; /* Allow content to define height */
+         opacity: 1; /* Make it fully visible */
+         display: block; /* Ensure it's displayed */
+         visibility: visible; /* Ensure it's visible */
+      }
+
+      /* Ensure the inner content div doesn't have conflicting styles */
+      #mobileMenu > div {
+          padding-top: 0.5rem; /* Add back padding removed from transition property */
+          padding-bottom: 0.75rem; /* Add back padding removed from transition property */
+      }
+      /* --- End Improved Mobile Menu Animation CSS --- */
+
     </style>
   </head>
   <body
@@ -64,12 +107,10 @@
     <header class="glass sticky top-0 z-50">
       <nav class="container mx-auto px-4 py-4">
         <div class="flex justify-between items-center">
-          <!-- Logo -->
           <a href="/" class="text-2xl font-bold text-primary dark:text-white"
             >Modern Blog</a
           >
 
-          <!-- Navigation Links - Centered -->
           <div class="hidden md:flex items-center justify-center flex-1">
             <div class="flex space-x-8">
               <a
@@ -97,83 +138,82 @@
             </div>
           </div>
 
-          <!-- Right Side - Login/Register or Account Menu -->
-          <div class="flex items-center space-x-4">
-            <% if (user) { %>
-            <div class="dropdown">
-              <button
-                class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
-              >
-                <span><%= user.username %></span>
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+          <div class="flex items-center space-x-2 sm:space-x-4">
+            <div class="hidden md:flex items-center space-x-4">
+              <% if (user) { %>
+              <div class="dropdown">
+                <button
+                  class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-              <div class="dropdown-content p-2">
-                <a
-                  href="/users/dashboard"
-                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  >My Account</a
-                >
-                <a
-                  href="/users/blogs"
-                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  >My Blogs</a
-                >
-                <a
-                  href="/users/settings"
-                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  >Settings</a
-                >
-                <a
-                  href="/users/change-password"
-                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  >Change Password</a
-                >
-                <hr class="my-2 border-gray-200 dark:border-gray-700" />
-                <a
-                  href="/users/logout"
-                  class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  >Logout</a
-                >
+                  <span><%= user.username %></span>
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div class="dropdown-content p-2">
+                  <a
+                    href="/users/dashboard"
+                    class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    >My Account</a
+                  >
+                  <a
+                    href="/users/blogs"
+                    class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    >My Blogs</a
+                  >
+                  <a
+                    href="/users/settings"
+                    class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    >Settings</a
+                  >
+                  <a
+                    href="/users/change-password"
+                    class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    >Change Password</a
+                  >
+                  <hr class="my-2 border-gray-200 dark:border-gray-700" />
+                  <a
+                    href="/users/logout"
+                    class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    >Logout</a
+                  >
+                </div>
               </div>
+              <% } else { %>
+              <a
+                href="/login"
+                class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+                >Login</a
+              >
+              <a
+                href="/register"
+                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >Register</a
+              >
+              <% } %>
             </div>
-            <% } else { %>
-            <a
-              href="/login"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
-              >Login</a
-            >
-            <a
-              href="/register"
-              class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
-              >Register</a
-            >
-            <% } %>
 
-            <!-- Dark mode toggle -->
             <button
               id="darkModeToggle"
+              aria-label="Toggle dark mode"
               class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
             >
-              <!-- Sun Icon (for Light Mode) -->
               <svg
                 class="w-6 h-6 dark:hidden"
                 fill="none"
                 stroke="#FDB813"
                 viewBox="0 0 24 24"
               >
-                <!-- Sun color: #FDB813 (Bright Yellow) -->
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -181,15 +221,12 @@
                   d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                 />
               </svg>
-
-              <!-- Moon Icon (for Dark Mode) -->
               <svg
                 class="w-6 h-6 hidden dark:block"
                 fill="none"
                 stroke="#A0AEC0"
                 viewBox="0 0 24 24"
               >
-                <!-- Moon color: #A0AEC0 (Silvery Gray) -->
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -198,67 +235,120 @@
                 />
               </svg>
             </button>
+
+            <div class="md:hidden">
+              <button
+                id="hamburgerButton"
+                aria-label="Open main menu"
+                aria-expanded="false"
+                class="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+              >
+                <span class="sr-only">Open main menu</span>
+                <svg
+                  id="menuIconOpen"
+                  class="block h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+                <svg
+                  id="menuIconClose"
+                  class="hidden h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Mobile Navigation -->
-        <div class="md:hidden mt-4">
-          <div class="flex flex-col space-y-2">
+        <div
+          id="mobileMenu"
+          class="md:hidden mobile-menu-transition"
+        >
+          <div class="px-2 space-y-1 sm:px-3">
             <a
               href="/"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >Home</a
             >
             <a
               href="/about"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >About</a
             >
             <a
               href="/contact"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >Contact</a
             >
             <% if (user) { %>
             <a
               href="/users/blogs/create"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >Write Blog</a
             >
+            <hr class="my-2 border-gray-200 dark:border-gray-600" />
+            <div
+              class="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400"
+            >
+              <%= user.username %>
+            </div>
             <a
               href="/users/dashboard"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >My Account</a
             >
             <a
               href="/users/blogs"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >My Blogs</a
             >
             <a
               href="/users/settings"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >Settings</a
             >
             <a
               href="/users/change-password"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >Change Password</a
             >
+            <hr class="my-2 border-gray-200 dark:border-gray-600" />
             <a
               href="/users/logout"
-              class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700"
               >Logout</a
             >
             <% } else { %>
+            <hr class="my-2 border-gray-200 dark:border-gray-600" />
             <a
               href="/login"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >Login</a
             >
             <a
               href="/register"
-              class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >Register</a
             >
             <% } %>
