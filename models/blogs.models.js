@@ -1,3 +1,4 @@
+// models/blogs.models.js
 import { Schema, model } from "mongoose";
 
 const blogSchema = new Schema(
@@ -24,14 +25,18 @@ const blogSchema = new Schema(
       type: Number,
       default: 0,
     },
-    likes: {
-      type: Number,
-      default: 0,
-    },
-    comments:{
+    likedBy: [
+      {
         type: Schema.Types.ObjectId,
-        ref: "Comment"
-    }
+        ref: "User",
+      },
+    ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamps: true }
 );
